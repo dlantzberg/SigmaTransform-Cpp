@@ -15,16 +15,18 @@ depending on your distribution, or compiled from scratch using the *--enable-thr
 
 The examples
 
-    Example1D_ConstantQ.cpp
-    Example1D_STFT.cpp
-    Example1D_Wavelet.cpp
-    Example1D_async.cpp
-    Example1D_inline.cpp
-    Example1D_threads.cpp
-    Example2D_Curvelet.cpp
-    Example2D_NPShearlet.cpp
-    Example2D_SIM2.cpp
-    Example2D_STFT.cpp
-    Example2D_Wavelet.cpp,
+    Example1D_ConstantQ.cpp     # The 1D Constant-Q Transform
+    Example1D_STFT.cpp          # The 1D Short-Time Fourier Transform
+    Example1D_Wavelet.cpp       # The 1D Wavelet Transform
+    Example1D_async.cpp         # Using the implementation asynchronously
+    Example1D_inline.cpp        # Using the implementation inline
+    Example1D_threads.cpp       # Using multiple threads/parallel processing
+    Example2D_Curvelet.cpp      # The 2D Curvelet Transform
+    Example2D_NPShearlet.cpp    # The Non-Parabolic Shearlet Transform
+    Example2D_SIM2.cpp          # The SIM(2)-Transform
+    Example2D_STFT.cpp          # The 2D Short-Time Fourier Transform
+    Example2D_Wavelet.cpp,      # The 2D Wavelet Transform
 
-located in the *./Examples* subdirectory show how to use the implementation. The provided makefile should compile and link all examples - on Windows as well as Linux with the appropriate tools and libraries installed -, as well as the Code for the SigmaTransform itself. The binaries will be put into the subdirectory ./bin.
+located in the *./Examples* subdirectory show how to use the implementation, along with some special cases. The provided makefile should compile and link all examples - on Windows as well as Linux with the appropriate tools and libraries installed -, as well as the Code for the SigmaTransform itself. The binaries will be put into the subdirectory ./bin.
+
+Note that this library is not intended to show maximal performance, but show the usability of the universal interface of the "Sigma Transform" to perform well-known signal processing transforms / algorithms, differing only by single paramater - the "spectral diffeomorphism".
