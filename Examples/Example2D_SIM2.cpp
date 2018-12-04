@@ -37,14 +37,14 @@ int main( int argc , char** argv ) {
                                                                     sigma::linspace( log2(1), log2(64)*1.1, 7 ) ,
                                                                     sigma::linspace( -M_PI/2*1.1, M_PI/2*1.1,  17 ) } );
 
-        //construct 2D WaveletTransform transform
+        //construct 2D SIM(2)-Transform
         sigma::SIM2D    SIM2T(
             sigma::point<2>(2) ,   // window (point<N>->cmpx (NULL for warped Gaussian))
             Fs ,       // spatial/temporal sampling rate  ( point<N> )
             sz ,       // signal length ( point<N> )
             grid       // shift-steps in warped Fourier domain ( point<N>-vec )
         );
-        
+
         // stop and restart chronometer
         Chrono.toc("construct").tic();
 

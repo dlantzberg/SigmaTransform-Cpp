@@ -28,7 +28,7 @@ int main( int argc, char** argv ) {
         // setup
         double Fs = 143000, len = bat_signal.size(), numsteps = len * 200;
 
-        //construct 1D STFT transform
+        //construct 1D Wavelet transform
         sigma::WaveletTransform1D    sigT1D(
             (sigma::point<1>)4.0,          // window or: width (in steps) of a warped Gaussian window
             Fs ,                           // spatial/temporal sampling rate  ( point<N> )

@@ -34,7 +34,7 @@ int main( int argc , char** argv ) {
         cxVec lena = sigma::loadAscii2D( "Signals/lena.asc", x, y );
         sigma::point<2>    sz( std::array<double,2>{ (double)x , (double)y } );
 
-        //construct 1D STFT transform
+        //construct 2D STFT
         sigma::SigmaTransform<2>    sigT2D(
             NULL,       // diffeomorphism ( point<N> -> point<N> ; (NULL for identity))
             rect2D,     // window ( point<N> -> cmplx ; (NULL for warped Gaussian))
@@ -62,11 +62,6 @@ int main( int argc , char** argv ) {
         // save reconstruction
         // sigma::save2file_bin( "bat_out.bin" , sigT2D.getReconstruction() );
         // Chrono.toc("saveRecon");
-
-        // for( auto& x : sigT2D.getReconstruction() ) {
-        //     float d = abs(x);
-        //     std::cout.write((char*)&d,4);
-        // }
     } catch( std::exception &e ) {
         // error?
         std::cerr << "Error: " << e.what() << std::endl;

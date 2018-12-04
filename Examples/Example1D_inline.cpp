@@ -27,7 +27,7 @@ int main( int argc, char** argv ) {
             .getReconstruction()                                                // return reconstruction
         );                                                                      // destroy
         // stop chronometer
-        Chrono.toc("Inline WaveletTrans. with 16000000 Coeffs done.");
+        Chrono.toc("Inline WaveletTrnsf. with 16000000 Coeffs done.");
     } catch( std::exception &e ) {
         // error?
         std::cerr << "Error: " << e.what() << std::endl;

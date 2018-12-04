@@ -39,9 +39,8 @@ int main( int argc , char** argv ) {
         for( auto& st : grid )
             st[1] *= exp( log(2)/2 * st[0] );
 
-        //construct 2D WaveletTransform transform
+        //construct 2D Curvlet Transform transform
         sigma::Curvelet2D    CurveT(
-            //NULL ,   // window (point<N>->cmpx (NULL for warped Gaussian))
             rect2D ,   // window (point<N>->cmpx (NULL for warped Gaussian))
             Fs ,       // spatial/temporal sampling rate  ( point<N> )
             sz ,       // signal length ( point<N> )
@@ -60,12 +59,12 @@ int main( int argc , char** argv ) {
         Chrono.toc("synthesize").tic();
 
         // save coefficients
-        sigma::save2file_bin( "lena_coeff.bin", CurveT.getCoeffs() );
-        Chrono.toc("saveCoeffs").tic();
+        // sigma::save2file_bin( "lena_coeff.bin", CurveT.getCoeffs() );
+        // Chrono.toc("saveCoeffs").tic();
 
         // save windows
-        sigma::save2file_bin( "lena_windows.bin", CurveT.getWindows() );
-        Chrono.toc("saveWindows").tic();
+        // sigma::save2file_bin( "lena_windows.bin", CurveT.getWindows() );
+        // Chrono.toc("saveWindows").tic();
 
         // save reconstruction
         //sigma::save2file( "lena_rec.bin" , CurveT.getReconstruction() , sz );

@@ -35,7 +35,7 @@ int main( int argc, char** argv ) {
         // start chronometer
         Chrono.tic();
 
-        // create
+        // create STFT
         sigma::SigmaTransform<1> sig(
             NULL,                     // diffeomorphism ( point<N> -> point<N> ; (NULL for identity))
             (sigma::winFunc<1>)NULL,  // window ( point<N> -> cmplx ; (NULL for warped Gaussian))

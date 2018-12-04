@@ -29,10 +29,10 @@ int main( int argc, char** argv ) {
 
         //construct 2D WaveletTransform transform
         sigma::WaveletTransform2D    WT2D(
-            []( sigma::point<2> const& p ) { return p>0 && p<=1; } ,   // window (point<N>->cmpx (NULL for warped Gaussian))
-            Fs ,                                                    // spatial/temporal sampling rate  ( point<N> )
-            sz ,                                                    // signal length ( point<N> )
-            sigma::meshgridN<2>( sigma::linspace( log2(1), log2(32), 6 ) )// shift-steps in warped Fourier domain ( point<N>-vec )
+            []( sigma::point<2> const& p ) { return p>0 && p<=1; } ,        // window (point<N>->cmpx (NULL for warped Gaussian))
+            Fs ,                                                            // spatial/temporal sampling rate  ( point<N> )
+            sz ,                                                            // signal length ( point<N> )
+            sigma::meshgridN<2>( sigma::linspace( log2(1), log2(32), 6 ) )  // shift-steps in warped Fourier domain ( point<N>-vec )
         );
 
         // stop and restart chronometer

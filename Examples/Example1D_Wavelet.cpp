@@ -29,7 +29,7 @@ int main( int argc, char** argv ) {
         double Fs = 143000, len = bat_signal.size(), numsteps = len * 200;
         std::vector<sigma::point<1>> chans = sigma::meshgridN<1>( sigma::linspace( log2(Fs*0.005) , log2(Fs/2*1.1) , numsteps ) );
 
-        //construct 1D STFT transform
+        //construct 1D Wavelet transform
         sigma::WaveletTransform1D    Wavelet1D(
             (sigma::point<1>)4.0,          // window or: width (in steps) of a warped Gaussian window
             Fs ,                           // spatial/temporal sampling rate  ( point<N> )

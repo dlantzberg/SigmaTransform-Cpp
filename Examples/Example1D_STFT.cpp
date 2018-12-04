@@ -36,7 +36,7 @@ int main( int argc, char** argv ) {
             len ,                          // signal length ( point<N> )
             chans                         // the channels in the warped Fourier domain
         );
-        std::cout <<"Wavelet transform with " << std::fixed << (int)(numsteps * len / 1000000) << " million coefficients.\n";
+        std::cout <<"ShortTimeFourierTransform with " << std::fixed << (int)(numsteps * len / 1000000) << " million coefficients.\n";
 
         // stop and restart chronometer
         Chrono.toc("construct").tic();

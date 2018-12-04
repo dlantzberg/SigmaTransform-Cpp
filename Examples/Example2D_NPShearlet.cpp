@@ -35,7 +35,7 @@ int main( int argc, char** argv ) {
         // make channels
         std::vector<sigma::point<2>> grid = sigma::meshgridN<2>(std::array<std::vector<double>,2>{ sigma::linspace(  0, 8, 5 ) ,
                                                                                                    sigma::linspace( -4, 4, 9 ) });
-        //construct 2D WaveletTransform transform
+        //construct 2D Non-Parabolic-Shearlet-Transform
         sigma::NPShearlet2D    NPShearlet2D(
             rect2D ,   // window (point<N>->cmpx (NULL for warped Gaussian))
             Fs ,       // spatial/temporal sampling rate  ( point<N> )
