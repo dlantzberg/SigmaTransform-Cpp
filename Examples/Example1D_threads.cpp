@@ -49,12 +49,12 @@ int main( int argc, char** argv ) {
         }
 
         // save windows
-        sigma::save2file_bin("bat_windows.bin",sigT1D.getWindows() );
-        Chrono.toc("saveWindows").tic();
+        // sigma::save2file_bin("bat_windows.bin",sigT1D.getWindows() );
+        // Chrono.toc("saveWindows").tic();
 
         // save coefficients
-        sigma::save2file_bin("bat_coeff.bin",sigT1D.getCoeffs() );
-        Chrono.toc("saveCoeffs").tic();
+        // sigma::save2file_bin("bat_coeff.bin",sigT1D.getCoeffs() );
+        // Chrono.toc("saveCoeffs").tic();
 
         // maske coefficients
         sigT1D.setNumThreads(8).applyMask( [&]( sigma::point<1>const& x, sigma::point<1>const& step )->sigma::cmpx {
@@ -63,8 +63,8 @@ int main( int argc, char** argv ) {
         Chrono.toc("masking    with  8 thread(s)").tic();
 
         // save masked coefficients
-        sigma::save2file_bin("bat_coeff_masked.bin",sigT1D.getCoeffs() );
-        Chrono.toc("saveMaskedCoeffs").tic();
+        // sigma::save2file_bin("bat_coeff_masked.bin",sigT1D.getCoeffs() );
+        // Chrono.toc("saveMaskedCoeffs").tic();
 
         // synthesize
         for( int k = 1 ; k <= 8 ; k*=2 ) {
