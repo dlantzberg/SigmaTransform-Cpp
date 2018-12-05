@@ -12,6 +12,8 @@
 #include <mutex>
 #include <functional>
 
+#define DEBUG
+
 #ifdef DEBUG
 
 #include <chrono>
