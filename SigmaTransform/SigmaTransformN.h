@@ -45,7 +45,7 @@ namespace SigmaTransform {
              *  @param  action      a function handle for the "group action" performed in the warped Fourier domain, defaults to "subtraction"
              *  @param  numThreads  the number of threads used for parallel processing (multiplications, additions as well as for FFTW), defaults to 4
              */
-            SigmaTransform( diffFunc<N> sigma=NULL,  const point<N> &winWidth={0}, const point<N> &Fs=point<N>(0), const point<N> &size=point<N>(0),
+            SigmaTransform( diffFunc<N> sigma=NULL,  const point<N> &winWidth=point<N>(0), const point<N> &Fs=point<N>(0), const point<N> &size=point<N>(0),
                             const std::vector<point<N>> &steps=std::vector<point<N>>(0), actFunc<N> action=minus<N> , int const& numThreads = 4 )
             : SigmaTransform( sigma, (winFunc<N>)(NULL), Fs,size,steps,action,numThreads) { m_winWidth = winWidth; }
 

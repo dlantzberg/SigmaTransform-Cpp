@@ -287,7 +287,7 @@ namespace SigmaTransform {
     *  @return             void
     */
     template<size_t N>
-    void save2file_asc( std::string const& filename , const cxVec &out , const point<N> &dim = {0} ) {
+    void save2file_asc( std::string const& filename , const cxVec &out , const point<N> & dim = point<N>(0) ) {
         // use a stringstream buffer
         std::stringstream ss;
         // set precision
