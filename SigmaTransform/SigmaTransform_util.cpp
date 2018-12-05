@@ -29,54 +29,53 @@ namespace SigmaTransform {
     #endif
 
     // loads an ascii file, containing 1d data
-	cxVec loadAscii1D( std::string const& filename ) {
-		// tmp file
-		double tmp;
+    cxVec loadAscii1D( std::string const& filename ) {
+        double tmp;
         cxVec out;
-		// input filestream
-		std::ifstream is(filename);
-		if( !is )
+        // input filestream
+        std::ifstream is(filename);
+        if( !is )
             throw std::runtime_error("Error opening File.");
-		// read
-		while( is >> tmp )
-			out.push_back( tmp );
+        // read
+        while( is >> tmp )
+            out.push_back( tmp );
         // return the read data
         return std::move( out );
-	}
+    }
 
     // loads an ascii file, containing 2d data
-	cxVec loadAscii2D( std::string const& filename , int &x , int &y ) {
-		// tmp
-		double tmp;
+    cxVec loadAscii2D( std::string const& filename , int &x , int &y ) {
+        // tmp
+        double tmp;
         cxVec out;
-		// string for a line
-		std::string line;
-		// input filestream
-		std::ifstream is(filename);
-		if( !is )
+        // string for a line
+        std::string line;
+        // input filestream
+        std::ifstream is(filename);
+        if( !is )
             throw std::runtime_error("Error opening File.");
-		// read file
-		y=0;
-		while( std::getline(is, line,'\n') ) {
-			// read line
-			x = 0;
-			std::stringstream ss(line);
-			while( ss >> tmp ) {
-				out.push_back( tmp );
-				++x;
-			}
-			++y;
-		}
+        // read file
+        y=0;
+        while( std::getline(is, line,'\n') ) {
+            // read line
+            x = 0;
+            std::stringstream ss(line);
+            while( ss >> tmp ) {
+                out.push_back( tmp );
+                ++x;
+            }
+            ++y;
+        }
         // return the read data
         return std::move( out );
-	}
+    }
 
     // saves "out" as a binary file "filename"
     void save2file_bin( std::string const& filename , const cxVec &out ) {
-		std::ofstream( filename , std::ios::binary ).write((char*)out.data(),sizeof(double)*2*out.size());
-	}
+        std::ofstream( filename , std::ios::binary ).write((char*)out.data(),sizeof(double)*2*out.size());
+    }
 
-	// returns a linearly spaced vector between L and R in N steps
+    // returns a linearly spaced vector between L and R in N steps
     std::vector<double> linspace( const double &L , const double &R , const int &N ) {
         std::vector<double> out(N);
         double delta = (R-L) / (N-1);
@@ -88,7 +87,7 @@ namespace SigmaTransform {
         return out;
     }
 
-	// returns a linearly spaced vector between L and R in N steps
+    // returns a Fourier axis of length "len", with sampling frequency "fs"
     std::vector<double> FourierAxis( const double &fs , const unsigned &len ) {
         std::vector<double> domain = linspace( 0 , fs , len );
         double offset = fs + domain[1];
@@ -96,7 +95,13 @@ namespace SigmaTransform {
         return domain;
     }
 
-    // this recursive loop replaces nested loops
+    // Starts a recursive loop and applies "toDo" for each point between (0,...,0) and "(max_1,...,max_n)"
+    void StartRecursiveLoop( const std::vector<int>& max , std::function<void(const std::vector<int>&)> toDo ) {
+        std::vector<int> index; index.resize( max.size() , 0 );
+        recursiveLoop( index , max , max.size()-1 , toDo );
+    }
+
+    // Applies a recursive loop, which replaces an arbitrary number of nested loops
     void recursiveLoop( std::vector<int> &index, const std::vector<int>& max , const int& curr_ind ,
                         std::function<void(const std::vector<int>&)> toDo ) {
         for( index[curr_ind] = 0 ; index[curr_ind] < max[curr_ind] ; ++index[curr_ind] ) {
@@ -105,12 +110,6 @@ namespace SigmaTransform {
             else
                 toDo( index );
         }
-    }
-
-    //void StartRecursiveLoop( const std::vector<int>& max , void (*toDo)(const std::vector<int>&) ) {
-    void StartRecursiveLoop( const std::vector<int>& max , std::function<void(const std::vector<int>&)> toDo ) {
-        std::vector<int> index; index.resize( max.size() , 0 );
-        recursiveLoop( index , max , max.size()-1 , toDo );
     }
 
 } // namespace SigmaTransform

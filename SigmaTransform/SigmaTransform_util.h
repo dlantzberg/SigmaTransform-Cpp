@@ -12,18 +12,14 @@
 #include <mutex>
 #include <functional>
 
-#include <fftw3.h>
-
-#define DEBUG
-
-//using namespace std;
-
 #ifdef DEBUG
 
 #include <chrono>
 #include <iomanip>
 
 #endif
+
+#include <fftw3.h>
 
 namespace SigmaTransform {
 
@@ -32,31 +28,53 @@ namespace SigmaTransform {
 
     #ifdef DEBUG
 
+    /** Class to conveniently measure the timing of executed code.
+    */
     class Chronometer {
             std::chrono::steady_clock::time_point _tic;
         public:
             Chronometer();
+
+            /** Starts/resets the timer.
+             *
+             *  @return             void
+             */
             void tic();
+
+            /** Stops the timer and prints the elapsed time, along with the message "str".
+             *
+             *  @param  str         a string, containing a message to print to stdout
+             *
+             *  @return             void
+             */
             Chronometer& toc(std::string const& str );
     };
 
     #endif
 
+    /** Class template for an N-dimensional point.
+    *
+    *   This class contains all kinds of overloaded operator for usage as what is
+    *   usually perceived as a "point" in the linear algebraic sense, that is,
+    *   points may be added, subtracted, multiplied, compared, etc. and implementations for
+    *   the modulus, square, sum are available and the standard c++-output streams are overloaded.
+    *
+    *   Since the names of the methods are self-explanatory, this header shall suffice as a documentation.
+    */
     template<size_t N>
     class point {
-            // data
+            // private, internally handled data
             std::array<double,N>    _data;
 
         public:
 
-            // getData
-            double* get() { return _data; }
-
-            // constructor
+            // constructors
             point<N>() : point<N>({0}) {}
             point<N>(double const& x) { for( auto& _x : _data ) _x = x; }
             point<N>( std::array<double,N> dat ) : _data( dat ) {}
-            //point<N>( std::array<int,N> dat ) { for(int k=0;k<N;++k)_data[k]=(double)dat[k];}
+
+            // we may overwrite a point
+            void operator=( std::array<int,N> dat ) { for(int k=0;k<N;++k)_data[k]=(double)dat[k]; }
 
             // overloaded arithmetic operator with const-qualifier
             point<N> operator+( point<N> const& r ) const { point<N> p(_data); auto R=r.begin(); for( auto& x : p ) x += *R++; return std::move( p ); }
@@ -68,41 +86,41 @@ namespace SigmaTransform {
             point<N> operator+( double const& r ) const { point<N> p(_data); for( auto& x : p ) x += r; return std::move( p ); }
             point<N> operator-( double const& r ) const { point<N> p(_data); for( auto& x : p ) x -= r; return std::move( p ); }
 
-            void operator=( std::array<int,N> dat ) { for(int k=0;k<N;++k)_data[k]=(double)dat[k]; }
-
             // overloaded arithmetic operator
             void operator+=( point<N> const&  r ) { auto R=r.begin(); for( auto& x : _data ) x += *R++; }
             void operator-=( point<N> const&  r ) { auto R=r.begin(); for( auto& x : _data ) x -= *R++; }
             void operator*=( point<N> const&  r ) { auto R=r.begin(); for( auto& x : _data ) x *= *R++; }
             void operator/=( point<N> const&  r ) { auto R=r.begin(); for( auto& x : _data ) x /= *R++; }
 
-            double&         operator[](size_t const& ind)       { return _data[ind]; }
-            double const&   operator[](size_t const& ind) const { return _data[ind]; }
-
-            // sum / prod / sq(uare)
+            // sum / prod / abs/ sq(uare)
             double   sum()  const { double s = 0; for( auto const& x : _data ) s+=x; return s; }
             double   prod() const { double p = 1; for( auto const& x : _data ) p*=x; return p; }
             point<N> sq() const { point<N> p( _data ); for( auto& x : p ) x *= x; return std::move( p ); }
             point<N> abs() const { point<N> p( _data ); for( auto& x : p ) x = (x>=0)?x:-x; return std::move( p ); }
 
+            // apply specific functions to each component in the "point-vector"
             point<N> apply( double(*fun)(double const&) ) const { point<N> p; for(int k=0;k<N;++k) p[k] = fun(_data[k]); return std::move( p ); }
             point<N> apply( double(*fun)(double) ) const { point<N> p; for(int k=0;k<N;++k) p[k] = fun(_data[k]); return std::move( p ); }
 
+            // comparison-related operator
             point<N> operator>( double const& d ) const { point<N> p(_data); for( auto& x : p ) x = x>d; return std::move( p ); }
             point<N> operator<( double const& d ) const { point<N> p(_data); for( auto& x : p ) x = x<d; return std::move( p ); }
             point<N> operator<=( double const& d ) const { point<N> p(_data); for( auto& x : p ) x = x<=d; return std::move( p ); }
             point<N> operator>=( double const& d ) const { point<N> p(_data); for( auto& x : p ) x = x>=d; return std::move( p ); }
             point<N> operator==( double const& d ) const { point<N> p(_data); for( auto& x : p ) x = x==d; return std::move( p ); }
-
             point<N> operator>( point<N> const& r ) const { point<N> p(_data); auto R=r.begin(); for(auto&x : p) x = x>*R++; return std::move( p ); }
             point<N> operator<( point<N> const& r ) const { point<N> p(_data); auto R=r.begin(); for(auto&x : p) x = x<*R++; return std::move( p ); }
             point<N> operator>=( point<N> const& r ) const { point<N> p(_data); auto R=r.begin(); for(auto&x : p) x = x>=*R++; return std::move( p ); }
             point<N> operator<=( point<N> const& r ) const { point<N> p(_data); auto R=r.begin(); for(auto&x : p) x = x<=*R++; return std::move( p ); }
             point<N> operator==( point<N> const& r ) const { point<N> p(_data); auto R=r.begin(); for(auto&x : p) x = x==*R++; return std::move( p ); }
-
             operator bool() { bool b=true; for(auto&x:_data) if(x!=1) b=false; return b; }
 
-            // iterators
+            // acquire internal data
+            double&         operator[](size_t const& ind)       { return _data[ind]; }
+            double const&   operator[](size_t const& ind) const { return _data[ind]; }
+            double* get() { return _data; }
+
+            // iterators, for compatibility with the C++ - Std Template Library
             typedef typename std::array<double,N>::iterator                 iterator;
             typedef typename std::array<double,N>::const_iterator           const_iterator;
             typedef typename std::array<double,N>::reverse_iterator         reverse_iterator;
@@ -129,7 +147,7 @@ namespace SigmaTransform {
 
     };
 
-    // shorthands
+    // shorthands for cleaner code
     using   cmpx        = std::complex<double>;
     using   cxVec       = std::vector<cmpx>;
 
@@ -137,22 +155,73 @@ namespace SigmaTransform {
     template<size_t N> using   winFunc  = std::function<cmpx(const point<N>&)>;
     template<size_t N> using   actFunc  = std::function<point<N>(const point<N>&,const point<N>&)>;
 
+    /** Loads 1D-ASCII file.
+     *
+     *  @param  filename    the filename
+     *
+     *  @return             the read file as complex vector
+     *
+     *  @throws             std::runtime_error
+     */
     cxVec loadAscii1D( std::string const& filename );
+
+    /** Loads 2D-ASCII file.
+     *
+     *  @param  filename    the filename
+     *
+     *  @return             the read file as complex vector
+     *
+     *  @throws             std::runtime_error
+     */
 	cxVec loadAscii2D( std::string const& filename, int &x , int &y );
 
-	// make a linearly spaced vector between L and R in N steps
+    /** Makes a linearly spaced vector between L and R in N steps.
+     *
+     *  @param  L           left boundary
+     *  @param  R           right boundary
+     *  @param  N           number of points
+     *
+     *  @return             linearly spaced vector
+     */
     std::vector<double> linspace( const double &L , const double &R , const int &N );
-	// make a Fourier axis of length "len", with sampling frequency "fs"
+
+    /** Makes a Fourier axis of length "len", with sampling frequency "fs".
+     *
+     *  @param  fs          sampling frequency
+     *  @param  len         number of points
+     *
+     *  @return             linearly spaced Fourier-axis vector
+     */
     std::vector<double> FourierAxis( const double &fs , const unsigned &len );
 
-    // a recursive loop replaces an arbitrary number of nested loops
+    /** Starts a recursive loop and applies "toDo" for each point between (0,...,0) and "(max_1,...,max_n)"
+    *
+    *  @param  max         vector, containing the maximal iteration-indices
+    *  @param  toDo        function handle, performing the nested operations, depending on the handed index
+    *
+    *  @return             void
+    */
+    void StartRecursiveLoop( const std::vector<int>& max , std::function<void(const std::vector<int>&)> toDo );
+
+    /** Applies a recursive loop, which replaces an arbitrary number of nested loops; internally called by
+     *  "StartRecursiveLoop".
+     *
+     *  @param  index       vector, containing the current iteration-indices
+     *  @param  max         vector, containing the maximal iteration-indices
+     *  @param  curr_int    the current nested iteration
+     *  @param  toDo        function handle, performing the nested operations, depending on the handed index
+     *
+     *  @return             void
+     */
     void recursiveLoop( std::vector<int> &index, const std::vector<int>& max , const int& curr_ind ,
                         std::function<void(const std::vector<int>&)> toDo );
 
-    // start a recursive loopa and apply "toDo" for each point between (0,...,0) and "(max_1,...,max_n)"
-    void StartRecursiveLoop( const std::vector<int>& max , std::function<void(const std::vector<int>&)> toDo );
-
-    // make N-D-meshgrid from N 1D-vectors
+    /** Makes N-D-meshgrid from N 1D-vectors.
+    *
+    *  @param  dom         array containg N double-vectors
+    *
+    *  @return             N-D meshgrid
+    */
     template<size_t N>
     std::vector<point<N>> meshgridN( std::array<std::vector<double>,N> const& dom ) {
         // make sizeVector for loop
@@ -177,7 +246,12 @@ namespace SigmaTransform {
         return std::move( out );
     }
 
-    // make N-D-meshgrid from 1D-vector
+    /** Makes symmetric N-D-meshgrid from single 1D-vector.
+    *
+    *  @param  dom         a double-vectors
+    *
+    *  @return             symmetric N-D meshgrid
+    */
     template<size_t N>
     std::vector<point<N>> meshgridN( std::vector<double> const& dom ) {
         // make sizeVector for loop
@@ -202,6 +276,14 @@ namespace SigmaTransform {
         return std::move( out );
     }
 
+    /** Saves N-dim complex vector to ASCII-file.
+    *
+    *  @param  filename    name of file to save data to
+    *  @param  out         complex vector, containing the data
+    *  @param  dim         N-dim point, containing the dimensions of the data
+    *
+    *  @return             void
+    */
     template<size_t N>
     void save2file_asc( std::string const& filename , const cxVec &out , point<N> const& dim = {0} ) {
         // use a stringstream buffer
@@ -222,33 +304,83 @@ namespace SigmaTransform {
         os<<ss.str();
 	}
 
+    /** Saves N-dim complex vector to binary-file.
+    *
+    *  @param  filename    name of file to save data to
+    *  @param  out         complex vector, containing the data
+    *
+    *  @return             void
+    */
     void save2file_bin( std::string const& filename , const cxVec &out );
 
+    /** Simple N-dim addition.
+    *
+    *  @param  l            left operand
+    *  @param  r            right operand
+    *
+    *  @return              sum
+    */
     template<size_t N>
     point<N> plus( const point<N> &l , const point<N> &r )  { return l + r; }
 
+    /** Simple N-dim subtraction.
+    *
+    *  @param  l            left operand
+    *  @param  r            right operand
+    *
+    *  @return              difference
+    */
     template<size_t N>
     point<N> minus( const point<N> &l , const point<N> &r ) { return l - r; }
 
+    /** Logarithm of the modulus.
+    *
+    *  @param  x            N-dim point
+    *
+    *  @return              log( abs( x ) )
+    */
     template<size_t N>
-    //point<N> logabs( const point<N> &in ) { point<N> out(in); for(auto&x:out)x=log(abs(x)+1E-16); return std::move(out); }
-    point<N> logabs( const point<N> &in ) { return (in.abs()+1E-16).apply( log2 ); }
-    template<size_t N>
-    point<N> logpos( const point<N> &in ) { return (in>0).apply( log2 ); }
+    point<N> logabs( const point<N> &x ) { return (x.abs()+1E-16).apply( log2 ); }
 
+    /** "Positive" logarithm.
+    *
+    *  @param  x           N-dim point
+    *
+    *  @return             logarithm of x if positive, -inf else
+    */
+    template<size_t N>
+    point<N> logpos( const point<N> &x ) { return (x>0).apply( log2 ); }
+
+    /** Identical diffeomorphism.
+    *
+    *  @param  x            N-dim point
+    *
+    *  @return              x
+    */
     template<size_t N>
     point<N> id( const point<N> &x )  { return x; }
 
+    /** Normalized Gaussian window.
+    *
+    *  @param  x            N-dim point
+    *
+    *  @return              normalized N-dim gaussian at x
+    */
     template<size_t N>
-    cmpx gauss( const point<N> &p  )  {
-        return exp( -PI * p.sq().sum() ) * point<N>(pow2_1_4).prod();
+    cmpx gauss( const point<N> &x  )  {
+        return exp( -PI * x.sq().sum() ) * point<N>(pow2_1_4).prod();
     }
 
+    /** Gaussian window of specific std-dev.
+    *
+    *  @param  x            N-dim point
+    *
+    *  @return             N-dim gaussian with N-dim standarddev "stddev" at x
+    */
     template<size_t N>
-    cmpx gauss_stddev( const point<N> &p , const point<N> &stddev ) {
-        return exp( -PI * (p/stddev).sq().sum() ) * point<N>(pow2_1_4).prod();
+    cmpx gauss_stddev( const point<N> &x , const point<N> &stddev ) {
+        return exp( -PI * (x/stddev).sq().sum() ) * point<N>(pow2_1_4).prod();
     }
-
 
 } // namespace SigmaTransform
 
