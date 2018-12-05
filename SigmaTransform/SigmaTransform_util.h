@@ -168,6 +168,8 @@ namespace SigmaTransform {
     /** Loads 2D-ASCII file.
      *
      *  @param  filename    the filename
+     *  @param  x           reference to an integer in which to put the x dimension
+     *  @param  y           reference to an integer in which to put the y dimension
      *
      *  @return             the read file as complex vector
      *
@@ -208,7 +210,7 @@ namespace SigmaTransform {
      *
      *  @param  index       vector, containing the current iteration-indices
      *  @param  max         vector, containing the maximal iteration-indices
-     *  @param  curr_int    the current nested iteration
+     *  @param  curr_ind    the current nested iteration
      *  @param  toDo        function handle, performing the nested operations, depending on the handed index
      *
      *  @return             void
@@ -285,7 +287,7 @@ namespace SigmaTransform {
     *  @return             void
     */
     template<size_t N>
-    void save2file_asc( std::string const& filename , const cxVec &out , point<N> const& dim = {0} ) {
+    void save2file_asc( std::string const& filename , const cxVec &out , const point<N> &dim = {0} ) {
         // use a stringstream buffer
         std::stringstream ss;
         // set precision
@@ -374,8 +376,9 @@ namespace SigmaTransform {
     /** Gaussian window of specific std-dev.
     *
     *  @param  x            N-dim point
+    *  @param  stddev       N-dim standard deviation
     *
-    *  @return             N-dim gaussian with N-dim standarddev "stddev" at x
+    *  @return              N-dim gaussian with N-dim standarddev "stddev" at x
     */
     template<size_t N>
     cmpx gauss_stddev( const point<N> &x , const point<N> &stddev ) {

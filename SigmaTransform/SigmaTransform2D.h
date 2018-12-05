@@ -7,18 +7,18 @@
 
 namespace SigmaTransform {
     /** Performs a polar diffeomorphism.
-    *   @param      a 2D cartesian point
+    *   @param  x       a 2D cartesian point
     *
-    *   @return     the 2D point in polar-coordinates
+    *   @return         the 2D point in polar-coordinates
     */
-    point<2> polar(const point<2> &p);
+    point<2> polar(const point<2> &x);
 
     /** Performs a shear diffeomorphism.
-    *   @param      a 2D cartesian point
+    *   @param  x       a 2D cartesian point
     *
-    *   @return     the 2D point in "shearing-coordinates"
+    *   @return         the 2D point in "shearing-coordinates"
     */
-    point<2> shear(const point<2> &p);
+    point<2> shear(const point<2> &x);
 
     /** Performs a parabolic shift.
     *   @param   l  2D point
