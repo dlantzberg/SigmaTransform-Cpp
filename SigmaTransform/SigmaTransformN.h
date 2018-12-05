@@ -440,7 +440,7 @@ namespace SigmaTransform {
              *  @param  onFinish    a callback-function to be called, when the work is done
              *
              *  @return             reference to the SigmaTransform-object
-             */
+             */ 
             SigmaTransform& asyncMultiplier( cxVec const& sig, mskFunc<N> maskFunc, std::function<void(SigmaTransform*)> onFinish ) {
                  m_threads.insert( std::make_pair<std::string,std::thread>( "Multiplier" , std::move( std::thread( [this,sig,maskFunc,onFinish]() {
                     //std::cout << "Starting 'Multiplier' asynchronously."<<std::endl;
