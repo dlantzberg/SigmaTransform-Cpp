@@ -370,7 +370,7 @@ namespace SigmaTransform {
                 }
             }
 
-            /** Performs the analyze-transform asynchronously.
+            /** Performs the analysis/transform asynchronously.
              *
              *  @param  sig         signal as a complex vector
              *  @param  onFinish    a callback-function to be called, when the work is done
@@ -391,7 +391,7 @@ namespace SigmaTransform {
                 return *this;
             }
 
-            /** Performs the synthesize-transform asynchronously.
+            /** Performs the synthesis/inverse transform asynchronously.
              *
              *  @param  onFinish    a callback-function to be called, when the work is done
              *
@@ -411,7 +411,7 @@ namespace SigmaTransform {
                 return *this;
             }
 
-            /** Performs the analyze-transform asynchronously.
+            /** Performs the multiplier asynchronously.
              *
              *  @param  sig         signal as a complex vector
              *  @param  mask        complex mask vector of the same size as the coefficient-vector
@@ -433,7 +433,7 @@ namespace SigmaTransform {
                 return *this;
             }
 
-            /** Performs the analyze-transform asynchronously.
+            /** Performs the multiplier asynchronously.
              *
              *  @param  sig         signal as a complex vector
              *  @param  maskFunc    a function handle for the masking function
