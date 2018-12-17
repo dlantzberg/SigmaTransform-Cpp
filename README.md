@@ -3,13 +3,13 @@ Implements the Sigma Transform in C++
 
 This repository shows an exemplary implementation of the "SigmaTransform", as defined in the thesis _"Quantum Frames and Uncertainty Principles arising from Symplectomorphisms"_, written in C/C++.
 
-The code was compiled and tested with g++ (GCC) 4.8.1, on Windows 7 and g++ (Debian 4.7.2-5) 4.7.2 on Debian Linux and uses the C++11 standard, as well as the FFTW library (http://fftw.org/), which should be installed prior to compilation. For Windows, a current shared-library version of FFTW3 (libfftw3-3.dll) is provided in the subdirectory ./FFTW. On a Linux machine, the library should be installed 
+The code was compiled and tested with g++ (GCC) 4.8.1, on Windows 7 and g++ (Debian 4.7.2-5) 4.7.2 on Debian Linux, each on a 64 Bit machine, and uses the C++11 standard, as well as the FFTW library (http://fftw.org/), which should be installed prior to compilation. For Windows, a current 64 Bit shared-library version of FFTW3 (libfftw3-3.dll) is provided in the subdirectory ./FFTW. On a Linux machine, the library should be installed 
 via a package manager, e.g. using
 
-    $ sudo apt-get install fftw3 fftw3-dev
-    $ sudo pacman -S fftw3 fftw3-dev
-    $ sudo yum install fftw3 fftw-devel
-    $ sudo rpm -i fftw3 fftw3-devel
+    $ sudo apt-get install fftw3-dev
+    $ sudo pacman -S fftw3-dev
+    $ sudo yum install fftw3-devel
+    $ sudo rpm -i fftw3-devel
     
 depending on your distribution, or compiled from scratch using the *--enable-threads* flag.
 
